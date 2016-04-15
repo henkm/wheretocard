@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<orderRequest version="1.0">
+	<client code="<%= client.client_code %>"> 
+		<username><%= client.username%></username> 
+		<password><%= client.password%></password>
+	</client>
+	<order referenceId="<%= order.reference_id %>">
+		<properties>
+			<property name="FIRST_NAME" value="<%= order.first_name %>"/>
+			<property name="INFIX" value="<%= order.infix %>"/>
+			<property name="LAST_NAME" value="<%= order.last_name %>"/>
+			<property name="EMAIL" value="<%= order.email %>"/>
+			<property name="STREET" value="<%= order.street %>"/>
+			<property name="HOUSE_NUMBER" value="<%= order.house_number %>"/>
+			<property name="POSTAL_CODE" value="<%= order.postal_code %>"/>
+			<property name="CITY" value="<%= order.city %>"/>
+		</properties> 
+		<cases>
+			<case code="<%= client.case_code %>">
+				<orderlines>
+					<% for line_item in order.line_items %>
+					<orderline code="<%= line_item.product_code %>" ticket-ref="<%= line_item.ticket_ref %>"> 
+						<quantity><%= line_item.quantity %></quantity>
+						<price><%= line_item.price %></price>
+						<action><%= line_item.description %></action>
+						<% if line_item.valid_from && line_item.valid_until %>
+						<validPeriod from="<%= line_item.valid_from.strftime("%Y-%m-%dT%H:%M:%S") %>" to="<%= line_item.valid_until.strftime("%Y-%m-%dT%H:%M:%S") %>"/>
+						<% end %>
+					</orderline>
+					<% end %>
+				</orderlines>
+			</case>
+		</cases>
+	</order> 
+	<tickets>
+			<% for line_item in order.line_items %>
+				<ticket ref="<%= line_item.ticket_ref %>" delivery-channel="<%= order.delivery_channel %>" delivery-format="<%= order.delivery_format %>">
+				<% if line_item.barcode %>
+				<contentCode><%= line_item.barcode %></contentCode>
+				<% end %>
+			</ticket>
+			<% end %>
+	</tickets>
+</orderRequest>
