@@ -13,7 +13,7 @@ require 'nokogiri'
 #  Files
 require "wheretocard/version"
 require "wheretocard/config"
-require "wheretocard/engine" if defined?(Rails) && Rails::VERSION::MAJOR.to_i >= 3
+# require "wheretocard/engine" if defined?(Rails) && Rails::VERSION::MAJOR.to_i >= 3
 require "wheretocard/wheretocard_error"
 require "wheretocard/client"
 require "wheretocard/order"
