@@ -34,6 +34,9 @@ To request two barcodes from two different ticket kinds (4 barcodes in total), y
                 case_code: yourcasecode
               )
 
+# Check the credentials first, without making test orders
+@order.check_credentials("TICKET_KIND_1_CODE") #returns true or false
+
 # Initialize a new OrderRequest 
 @order_request = @wtc_client.order_request
 @order_request.first_name = "Foo"
@@ -52,11 +55,14 @@ To request two barcodes from two different ticket kinds (4 barcodes in total), y
   valid_until: Time.now + 3.months
 )
 
+# It is also possible to not let WtC pick a barcode,
+# but to submit your own barcode by adding the 'barcode' param
 @order_request.add_line_item(
   product_code: TICKET_KIND_3_CODE,
   quantity: 2,
   price: 1750,
   description: Action Description,
+  barcode: "ABC12345"
   valid_from: Time.now,
   valid_until: Time.now + 3.months
 )

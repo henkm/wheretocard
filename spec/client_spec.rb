@@ -4,7 +4,7 @@ describe Wheretocard::Client do
 
 	context "valid settings" do
 
-		before(:all) do
+		before(:each) do
 			@client = Wheretocard::Client.new(
 									username: ENV['WHERETOCARD_USERNAME'], 
 									password: ENV['WHERETOCARD_PASSWORD'],
@@ -15,6 +15,21 @@ describe Wheretocard::Client do
 
 	  it "initializes as a 'Wheretocard::Client' object" do
 	  	expect(@client).to be_kind_of(Wheretocard::Client)
+	  end
+
+	  describe "#check_credentials" do
+	  	it "returns ok if credentials match" do
+	  		VCR.use_cassette("check-credentials") do 
+		  		expect(@client.check_credentials(ENV["WHERETOCARD_TICKET_KIND_1"])).to eq true
+		  	end
+	  	end
+
+	  	it "returns message if credentials don't match" do
+	  		@client.username = "wrongusername"
+	  		VCR.use_cassette("check-wrong-credentials") do 
+		  		expect(@client.check_credentials).to eq false
+		  	end
+	  	end
 	  end
 
 	  describe "#orders" do

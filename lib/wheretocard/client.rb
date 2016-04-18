@@ -29,6 +29,27 @@ module Wheretocard
       end
     end
 
+    def check_credentials(product_code="")
+      o = order
+      o.add_line_item(
+        price: 0, 
+        description: 'Checking credentials [TEST]', 
+        ticket_ref: 1234,
+        valid_from: Time.now,
+        valid_until: Time.now + 24*31*3600,
+        product_code: product_code, 
+        quantity: 0
+      )
+      begin
+        o.submit
+      rescue WheretocardError => e
+        # return true if the error raised is only about the
+        # number of tickets (cannot be zero)
+        e.to_s.include?("OI_0210")
+      end
+      
+    end
+
     # def order_requests
     #   Wheretocard::Order
     # end

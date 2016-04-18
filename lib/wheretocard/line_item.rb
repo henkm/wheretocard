@@ -1,6 +1,12 @@
 module Wheretocard
   #
   # Object representing a line item with attributes provided by WTC
+  # required args:
+  # - product_code (string)
+  # - price (integer - cents) 
+  # - valid_from (DateTime / Date)
+  # - valid_until (DateTime / Date)
+  # - barcode (string) OR quantity (integer)
   #
   # @return [Array] Errors
   class LineItem
@@ -21,9 +27,18 @@ module Wheretocard
     #
     # @param [Hash] args
     def initialize(args=nil)
+      @quantity = 1
       return if args.nil?
       args.each do |k,v|
         instance_variable_set("@#{k}", v) unless v.nil?
+      end
+
+      validate
+    end
+
+    def validate
+      if barcode && quantity && quantity > 1
+        raise WheretocardError.new(self), "Quantity cannot be greater than 1 if a barcode is specified."
       end
     end
 

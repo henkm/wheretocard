@@ -41,6 +41,18 @@ describe Wheretocard::Order do
       expect(xml).to be_kind_of(String)
       expect(xml).to match("FOO_BAR")
     end
+
+    it "sets quantity to 1 by default" do
+      line_item = @order.add_line_item(product_code: "FOO_BAR", price: 1000, description: 'test ticket')
+      expect(line_item.quantity).to eq(1)
+    end
+
+    it "validates a line item to see if barcode is given" do
+      expect do 
+        @order.add_line_item(product_code: "FOO_BAR", quantity: 2, price: 1000, description: 'test ticket', barcode: "1234")
+      end.to raise_error(/Quantity cannot be greater than 1 if a barcode is specified/)
+
+    end
   end
 
   describe "#submit" do

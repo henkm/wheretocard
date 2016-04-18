@@ -83,7 +83,7 @@ module Wheretocard
     def add_line_item(args=nil)
       line_item = Wheretocard::LineItem.new(args)
       line_items << line_item
-      return self
+      return line_item
     end
 
     # @return [String] the xml to send in the SOAP API
@@ -98,7 +98,7 @@ module Wheretocard
     # submit the xml to the WtC API url 
     # return object is a Wheretocard::Response
     def submit
-      validate_line_items
+      # validate_line_items
       Wheretocard::Response.from_order_request(self)
     end
 
