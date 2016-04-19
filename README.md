@@ -35,7 +35,7 @@ To request two barcodes from two different ticket kinds (4 barcodes in total), y
               )
 
 # Check the credentials first, without making test orders
-@order.check_credentials("TICKET_KIND_1_CODE") #returns true or false
+@wtc_client.check_credentials("TICKET_KIND_1_CODE") #returns true or false
 
 # Initialize a new OrderRequest 
 @order_request = @wtc_client.order_request
