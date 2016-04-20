@@ -38,15 +38,15 @@ To request two barcodes from two different ticket kinds (4 barcodes in total), y
 @wtc_client.check_credentials("TICKET_KIND_1_CODE") #returns true or false
 
 # Initialize a new OrderRequest 
-@order_request = @wtc_client.order_request
-@order_request.first_name = "Foo"
-@order_request.last_name = "Bar"
-@order_request.email = "foobar@example.org"
-@order_request.delivery_type = "BARCODE" # ["TEXTCODE","BARCODE"]
+@order = @wtc_client.new_order
+@order.first_name = "Foo"
+@order.last_name = "Bar"
+@order.email = "foobar@example.org"
+@order.delivery_type = "BARCODE" # ["TEXTCODE","BARCODE"]
 
 # Add line itmes to the request
 # Please note: the price is in cents (currency is EUR)
-@order_request.add_line_item(
+@order.add_line_item(
   product_code: TICKET_KIND_1_CODE,
   quantity: 2,
   price: 1250,
@@ -57,9 +57,11 @@ To request two barcodes from two different ticket kinds (4 barcodes in total), y
 
 # It is also possible to not let WtC pick a barcode,
 # but to submit your own barcode by adding the 'barcode' param
-@order_request.add_line_item(
+# WARNING: don't use quantity > 1 here, otherwise you'l create duplicate barcodes
+# If you need multiple tickets for this ticket kind, simply create one line item
+# per ticket.
+@order.add_line_item(
   product_code: TICKET_KIND_3_CODE,
-  quantity: 2,
   price: 1750,
   description: Action Description,
   barcode: "ABC12345"
@@ -69,7 +71,7 @@ To request two barcodes from two different ticket kinds (4 barcodes in total), y
 
 
 # Submit the request and receive a response object
-@response = @order_request.submit
+@response = @order.submit
 
 # redirect the consumer to the PDF download page:
 if @response.success?
