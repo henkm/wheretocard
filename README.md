@@ -42,7 +42,7 @@ To request two barcodes from two different ticket kinds (4 barcodes in total), y
 @order.first_name = "Foo"
 @order.last_name = "Bar"
 @order.email = "foobar@example.org"
-@order.delivery_type = "BARCODE" # ["TEXTCODE","BARCODE"]
+@order.delivery_format = "BARCODE" # ["TEXTCODE","BARCODE"]
 
 # Add line itmes to the request
 # Please note: the price is in cents (currency is EUR)
